@@ -64,4 +64,4 @@ build:
 .PHONY: run
 ## run project
 run: build
-	$(shell $(BUILD_FILE))
+	$(BUILD_FILE)
