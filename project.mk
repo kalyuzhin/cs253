@@ -18,7 +18,7 @@ ifeq ($(PLATFORM), windows)
     MKDIR_CMD = if not exist "$(LOCAL_BIN_FOLDER)" mkdir "$(subst /,\\,$(LOCAL_BIN_FOLDER))"
 else ifeq ($(PLATFORM), macOS)
     COMPILER = clang++
-    CPPFLAGS = -Wall -std=c++20 -o
+    CPPFLAGS = -Wall -std=c++20 -O3 -o
     BUILD_FILE = $(LOCAL_BIN_FOLDER)/run
     MKDIR_CMD = mkdir -p $(LOCAL_BIN_FOLDER)
 else ifeq ($(PLATFORM), linux)
