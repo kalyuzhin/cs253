@@ -1,0 +1,7 @@
+bin/
+.idea/
+.DS_Store
+.venv
+.env
+vscode/
+cmake-build-debug/
