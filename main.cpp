@@ -1,4 +1,6 @@
 #include <ios>
+#include <unordered_map>
+#include <vector>
 #include <iostream>
 
 using namespace std;
@@ -46,7 +48,18 @@ void subTask2() {
         cout << "Невозможно получить из первого числа второе" << endl;
     }
     res = 0;
-    ll cur = b;
+    ll cur = a;
+    unordered_map<ll, ll> attended;
+    attended.reserve(10000);
+
+    for (;;) {
+
+        if (cur == b) {
+            break;
+        }
+    }
+
+    for
 }
 
 //Реализовать задание из пункта 1 методом обратного поиска – от целевого состояния к начальному.
