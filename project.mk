@@ -2,10 +2,6 @@ ifneq (,$(wildcard .env))
 	include .env
 endif
 
-ifeq ($(POSTGRES_SETUP_TEST),)
-	POSTGRES_SETUP_TEST := user=$(DB_USERNAME) password=$(DB_PASSWORD) dbname=$(DB_NAME) host=$(DB_HOST) port=$(DB_PORT) sslmode=disable
-endif
-
 CUR_DIR=$(shell pwd)
 LOCAL_BIN_FOLDER=$(CUR_DIR)/bin
 MAIN_PATH=$(CUR_DIR)/main.cpp
@@ -23,7 +19,7 @@ else ifeq ($(PLATFORM), macOS)
     MKDIR_CMD = mkdir -p $(LOCAL_BIN_FOLDER)
 else ifeq ($(PLATFORM), linux)
     COMPILER = g++
-    CPPFLAGS = -Wall -std=c++20 -o
+    CPPFLAGS = -Wall -std=c++20 -O3 -o
     BUILD_FILE = $(LOCAL_BIN_FOLDER)/run
     MKDIR_CMD = mkdir -p $(LOCAL_BIN_FOLDER)
 else
@@ -65,3 +61,8 @@ build:
 ## run project
 run: build
 	$(BUILD_FILE)
+
+.PHONY: archive
+## make zip-archive of the project
+archive:
+	zip -r task.zip . -x "bin/*" "cmake-build-debug/*" "cmake-build-release/*" ".idea/*" ".git/*" ".DS_Store"

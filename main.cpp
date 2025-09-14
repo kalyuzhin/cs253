@@ -5,6 +5,9 @@
 #include <iostream>
 #include <unordered_set>
 
+#pragma GCC optimize("Ofast,unroll-loops")
+#pragma GCC target("avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
+
 using namespace std;
 
 #define endln "\n"
@@ -104,8 +107,115 @@ void subTask2(ll a, ll b) {
 
 //Реализовать задание из пункта 1 методом обратного поиска – от целевого состояния к начальному.
 // Сравнить эффективность.
-void subTask3(ll a, ll b) {
+void subTask3WithSubstraction(ll a, ll b) {
+    ll res, cntVerts, tmpVal, tmpCnt, cnt;
+    if (a > b) {
+        cout << "Невозможно получить из первого числа второе" << endl;
+    }
 
+    res = 0, cntVerts = 0, cnt = 0;
+    queue<pair<ll, ll>> q;
+    q.push(make_pair(b, 0));
+
+    unordered_set<ll> visited;
+    visited.reserve(HASH_SIZE);
+    visited.insert(b);
+
+
+    for (; !q.empty();) {
+        tmpVal = q.front().first, tmpCnt = q.front().second;
+        q.pop();
+        ++cntVerts;
+        if (tmpVal == a) {
+            res = tmpCnt;
+            break;
+        }
+        for (ll i = 0; i != 3; ++i) {
+            ll nextVal = tmpVal;
+            cnt = tmpCnt;
+            if (i == 0) {
+                nextVal -= 3;
+                ++cnt;
+            } else if (i == 1 && nextVal % 2 == 0) {
+                nextVal /= 2;
+                ++cnt;
+            } else if (i == 2) {
+                nextVal += 2;
+                ++cnt;
+            }
+
+            if (nextVal < a && a >= 0) {
+                continue;
+            }
+            if (nextVal > b * 2 && b > 0) {
+                continue;
+            }
+
+            if (visited.find(nextVal) == visited.end()) {
+                visited.insert(nextVal);
+                q.push(make_pair(nextVal, cnt));
+            }
+        }
+
+
+    }
+
+    cout << "Кол-во посещенных вершин: " << cntVerts << endln;
+    cout << "Мин кол-во шагов: " << res << endln;
+}
+
+void subTask3WOSubstraction(ll a, ll b) {
+    ll res, cntVerts, tmpVal, tmpCnt, cnt;
+    if (a > b) {
+        cout << "Невозможно получить из первого числа второе" << endl;
+    }
+
+    res = 0, cntVerts = 0, cnt = 0;
+    queue<pair<ll, ll>> q;
+    q.push(make_pair(b, 0));
+
+    unordered_set<ll> visited;
+    visited.reserve(HASH_SIZE);
+    visited.insert(b);
+
+
+    for (; !q.empty();) {
+        tmpVal = q.front().first, tmpCnt = q.front().second;
+        q.pop();
+        ++cntVerts;
+        if (tmpVal == a) {
+            res = tmpCnt;
+            break;
+        }
+        for (ll i = 0; i != 2; ++i) {
+            ll nextVal = tmpVal;
+            cnt = tmpCnt;
+            if (i == 0) {
+                nextVal -= 3;
+                ++cnt;
+            } else if (i == 1 && nextVal % 2 == 0) {
+                nextVal /= 2;
+                ++cnt;
+            }
+
+            if (nextVal < a && a >= 0) {
+                continue;
+            }
+            if (nextVal > b * 2 && b > 0) {
+                continue;
+            }
+
+            if (visited.find(nextVal) == visited.end()) {
+                visited.insert(nextVal);
+                q.push(make_pair(nextVal, cnt));
+            }
+        }
+
+
+    }
+
+    cout << "Кол-во посещенных вершин: " << cntVerts << endln;
+    cout << "Мин кол-во шагов: " << res << endln;
 }
 
 // Дополнительное задание. Реализовать метод двунаправленного поиска для решения задачи из пункта 1.
@@ -125,8 +235,8 @@ void countTime(ll a, ll b, void f(ll a, ll b)) {
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
-    ll a = 2, b = 10000001;
-    countTime(a, b, subTask2);
+    ll a = 2, b = 100;
+    countTime(a, b, subTask3WithSubstraction);
 
     return 0;
 }
