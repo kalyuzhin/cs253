@@ -224,19 +224,38 @@ void subTask4(ll a, ll b) {
 }
 
 void countTime(ll a, ll b, void f(ll a, ll b)) {
+    cout << "Входные данные: a=" << a << " b=" << b << endln;
     chrono::time_point start = chrono::high_resolution_clock::now();
     f(a, b);
     chrono::time_point end = chrono::high_resolution_clock::now();
     chrono::microseconds microseconds = chrono::duration_cast<chrono::microseconds>(end - start);
     double seconds = microseconds.count() / MICROSECONDS_TO_SECONDS;
-    cout << "Время: " << seconds << " секунд" << endl;
+    cout << "Время: " << seconds << " секунд" << endln << endln;
 }
 
 int main() {
     ios::sync_with_stdio(0);
     cin.tie(0);
-    ll a = 2, b = 100;
-    countTime(a, b, subTask3WithSubstraction);
+    vec<pair<ll, ll>> testCasesFirst{{1, 100},
+                                     {2, 55},
+                                     {2, 100},
+                                     {1, 97},
+                                     {2, 1000},
+                                     {2, 10000001}};
+    vec<pair<ll, ll>> testCasesSecond{{1, 100},
+                                      {2, 55},
+                                      {2, 100},
+                                      {1, 97},
+                                      {2, 1000},
+                                      {2, 10000001},
+                                      {3, 1001},
+                                      {3, 3001}};
+    for (auto &t: testCasesSecond) {
+        ll a = t.first;
+        ll b = t.second;
+        countTime(a, b, subTask2);
+    }
+
 
     return 0;
 }
