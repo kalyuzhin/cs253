@@ -65,4 +65,4 @@ run: build
 .PHONY: archive
 ## make zip-archive of the project
 archive:
-	zip -r task.zip . -x "bin/*" "cmake-build-debug/*" "cmake-build-release/*" ".idea/*" ".git/*" ".DS_Store"
+	zip -r task.zip . -x "bin/*" "cmake-build-debug/*" "cmake-build-release/*" ".idea/*" ".git/*" ".DS_Store" ".env"

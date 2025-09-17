@@ -2,6 +2,8 @@
 #include <queue>
 #include <vector>
 #include <chrono>
+#include <thread>
+#include <iomanip>
 #include <iostream>
 #include <unordered_set>
 
@@ -13,6 +15,7 @@ using namespace std;
 #define endln "\n"
 #define HASH_SIZE 100000
 #define MICROSECONDS_TO_SECONDS 1000000.0
+#define NUM_THREADS 2
 #define ll long long
 #define ull unsigned long long
 #define vll vector<ll>
@@ -220,8 +223,90 @@ void subTask3WOSubstraction(ll a, ll b) {
 
 // Дополнительное задание. Реализовать метод двунаправленного поиска для решения задачи из пункта 1.
 void subTask4(ll a, ll b) {
+    if (a > b) {
+        cout << "Невозможно получить из первого числа второе" << endln;
+        return;
+    }
+    queue<pair<ll, ll>> q1, q2;
+    unordered_map<ll, ll> visited1, visited2;
+    visited1.reserve(HASH_SIZE / 2);
+    visited2.reserve(HASH_SIZE / 2);
 
+    q1.push({a, 0});
+    visited1[a] = 0;
+
+    q2.push({b, 0});
+    visited2[b] = 0;
+
+    ll cntVertsF = 0, cntVertsB = 0, res = -1, cnt = 0;
+
+    while (!q1.empty() || !q2.empty()) {
+        if (!q1.empty()) {
+            ll tmpValF = q1.front().first, tmpCntF = q1.front().second;
+            q1.pop();
+            ++cntVertsF;
+            for (ll i = 0; i != 3; ++i) {
+                ll nextValF = tmpValF;
+                cnt = tmpCntF;
+                if (i == 0) {
+                    nextValF += 3;
+                    ++cnt;
+                } else if (i == 1) {
+                    nextValF *= 2;
+                    ++cnt;
+                } else {
+                    nextValF -= 2;
+                    ++cnt;
+                }
+
+                if (visited1.find(nextValF) == visited1.end()) {
+                    visited1[nextValF] = cnt;
+                    q1.push(make_pair(nextValF, cnt));
+                }
+                if (visited2.count(nextValF)) {
+                    res = visited1[nextValF];
+                    res += visited2[nextValF];
+                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << endln;
+                    cout << "Мин кол-во шагов: " << res << endln;
+
+                    return;
+                }
+            }
+        }
+        if (!q2.empty()) {
+            ll tmpValB = q2.front().first, tmpCntB = q2.front().second;
+            q2.pop();
+            for (ll i = 0; i != 3; ++i) {
+                ll nextValB = tmpValB;
+                cnt = tmpCntB;
+                if (i == 0) {
+                    nextValB -= 3;
+                    ++cnt;
+                } else if (i == 1 && nextValB % 2 == 0) {
+                    nextValB /= 2;
+                    ++cnt;
+                } else if (i == 2) {
+                    nextValB += 2;
+                    ++cnt;
+                }
+
+                if (visited2.find(nextValB) == visited2.end()) {
+                    visited2[nextValB] = cnt;
+                    q2.push(make_pair(nextValB, cnt));
+                }
+                if (visited1.count(nextValB)) {
+                    res = visited1[nextValB];
+                    res += visited2[nextValB];
+                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << endln;
+                    cout << "Мин кол-во шагов: " << res << endln;
+
+                    return;
+                }
+            }
+        }
+    }
 }
+
 
 void countTime(ll a, ll b, void f(ll a, ll b)) {
     cout << "Входные данные: a=" << a << " b=" << b << endln;
@@ -230,6 +315,7 @@ void countTime(ll a, ll b, void f(ll a, ll b)) {
     chrono::time_point end = chrono::high_resolution_clock::now();
     chrono::microseconds microseconds = chrono::duration_cast<chrono::microseconds>(end - start);
     double seconds = microseconds.count() / MICROSECONDS_TO_SECONDS;
+    cout << fixed << setprecision(8);
     cout << "Время: " << seconds << " секунд" << endln << endln;
 }
 
@@ -253,7 +339,7 @@ int main() {
     for (auto &t: testCasesSecond) {
         ll a = t.first;
         ll b = t.second;
-        countTime(a, b, subTask2);
+        countTime(a, b, subTask4);
     }
 
 
