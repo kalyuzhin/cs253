@@ -47,7 +47,7 @@ void subTask1(ll a, ll b) {
         }
     }
 
-    cout << res << endln;
+    cout << "Мин кол-во шагов: " << res << endln;
 }
 
 // То же самое, что и в пункте 1, однако добавляется операция «вычесть 2».
@@ -319,9 +319,7 @@ void countTime(ll a, ll b, void f(ll a, ll b)) {
     cout << "Время: " << seconds << " секунд" << endln << endln;
 }
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
+void test() {
     vec<pair<ll, ll>> testCasesFirst{{1, 100},
                                      {2, 55},
                                      {2, 100},
@@ -336,12 +334,57 @@ int main() {
                                       {2, 10000001},
                                       {3, 1001},
                                       {3, 3001}};
-    for (auto &t: testCasesSecond) {
+    cout << "Первое задание:" << endln;
+    for (pair<ll, ll> t: testCasesFirst) {
+        ll a = t.first;
+        ll b = t.second;
+        countTime(a, b, subTask1);
+    }
+
+    cout << "=================================\n";
+
+    cout << "Второе задание:" << endln;
+    for (pair<ll, ll> t: testCasesSecond) {
+        ll a = t.first;
+        ll b = t.second;
+        countTime(a, b, subTask2);
+    }
+
+    cout << "=================================\n";
+
+    cout << "Третье задание (без вычетания):" << endln;
+    for (pair<ll, ll> t: testCasesFirst) {
+        ll a = t.first;
+        ll b = t.second;
+        countTime(a, b, subTask3WOSubstraction);
+    }
+
+    cout << "=================================\n";
+
+    cout << "Третье задание (с вычетанием):" << endln;
+    for (pair<ll, ll> t: testCasesSecond) {
+        ll a = t.first;
+        ll b = t.second;
+        countTime(a, b, subTask3WithSubstraction);
+    }
+
+    cout << "=================================\n";
+
+    cout << "Четвертое задание:" << endln;
+    for (pair<ll, ll> t: testCasesFirst) {
         ll a = t.first;
         ll b = t.second;
         countTime(a, b, subTask4);
     }
 
+    cout << "=================================\n";
+
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    test();
 
     return 0;
 }
