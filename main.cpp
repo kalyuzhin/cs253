@@ -1,14 +1,7 @@
-#include "labs/lab1.h"
-
-
-void extraTask() {
-
-}
+#include "labs/lab2.h"
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    test();
+    run(0, nullptr);
 
     return 0;
 }

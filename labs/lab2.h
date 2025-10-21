@@ -5,10 +5,9 @@
 #ifndef COMPUTINGSYSTEMS_LAB2_H
 #define COMPUTINGSYSTEMS_LAB2_H
 
+#include "../provider.h"
 
-class lab2 {
-
-};
+int run(int argc, char **argv);
 
 
 #endif //COMPUTINGSYSTEMS_LAB2_H

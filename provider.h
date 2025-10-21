@@ -13,13 +13,15 @@
 #include <iomanip>
 #include <iostream>
 #include <unordered_set>
+#include <unordered_map>
+#include <fstream>
 
 #pragma GCC optimize("Ofast,unroll-loops")
 #pragma GCC target("avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
 
 using namespace std;
 
-#define endln "\n"
+#define nl "\n"
 #define HASH_SIZE 100000
 #define MICROSECONDS_TO_SECONDS 1000000.0
 #define NUM_THREADS 2

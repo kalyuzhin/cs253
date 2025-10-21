@@ -26,7 +26,7 @@ void subTask1(ll a, ll b) {
         }
     }
 
-    cout << "Мин кол-во шагов: " << res << endln;
+    cout << "Мин кол-во шагов: " << res << nl;
 }
 
 // То же самое, что и в пункте 1, однако добавляется операция «вычесть 2».
@@ -83,8 +83,8 @@ void subTask2(ll a, ll b) {
 
     }
 
-    cout << "Кол-во посещенных вершин: " << cntVerts << endln;
-    cout << "Мин кол-во шагов: " << res << endln;
+    cout << "Кол-во посещенных вершин: " << cntVerts << nl;
+    cout << "Мин кол-во шагов: " << res << nl;
 }
 
 //Реализовать задание из пункта 1 методом обратного поиска – от целевого состояния к начальному.
@@ -142,8 +142,8 @@ void subTask3WithSubstraction(ll a, ll b) {
 
     }
 
-    cout << "Кол-во посещенных вершин: " << cntVerts << endln;
-    cout << "Мин кол-во шагов: " << res << endln;
+    cout << "Кол-во посещенных вершин: " << cntVerts << nl;
+    cout << "Мин кол-во шагов: " << res << nl;
 }
 
 void subTask3WOSubstraction(ll a, ll b) {
@@ -196,14 +196,14 @@ void subTask3WOSubstraction(ll a, ll b) {
 
     }
 
-    cout << "Кол-во посещенных вершин: " << cntVerts << endln;
-    cout << "Мин кол-во шагов: " << res << endln;
+    cout << "Кол-во посещенных вершин: " << cntVerts << nl;
+    cout << "Мин кол-во шагов: " << res << nl;
 }
 
 // Дополнительное задание. Реализовать метод двунаправленного поиска для решения задачи из пункта 1.
 void subTask4(ll a, ll b) {
     if (a > b) {
-        cout << "Невозможно получить из первого числа второе" << endln;
+        cout << "Невозможно получить из первого числа второе" << nl;
         return;
     }
     queue<pair<ll, ll>> q1, q2;
@@ -245,8 +245,8 @@ void subTask4(ll a, ll b) {
                 if (visited2.count(nextValF)) {
                     res = visited1[nextValF];
                     res += visited2[nextValF];
-                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << endln;
-                    cout << "Мин кол-во шагов: " << res << endln;
+                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << nl;
+                    cout << "Мин кол-во шагов: " << res << nl;
 
                     return;
                 }
@@ -276,8 +276,8 @@ void subTask4(ll a, ll b) {
                 if (visited1.count(nextValB)) {
                     res = visited1[nextValB];
                     res += visited2[nextValB];
-                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << endln;
-                    cout << "Мин кол-во шагов: " << res << endln;
+                    cout << "Кол-во посещенных вершин: " << cntVertsF + cntVertsB << nl;
+                    cout << "Мин кол-во шагов: " << res << nl;
 
                     return;
                 }
@@ -288,14 +288,14 @@ void subTask4(ll a, ll b) {
 
 
 void countTime(ll a, ll b, void f(ll a, ll b)) {
-    cout << "Входные данные: a=" << a << " b=" << b << endln;
+    cout << "Входные данные: a=" << a << " b=" << b << nl;
     chrono::time_point start = chrono::high_resolution_clock::now();
     f(a, b);
     chrono::time_point end = chrono::high_resolution_clock::now();
     chrono::microseconds microseconds = chrono::duration_cast<chrono::microseconds>(end - start);
     double seconds = microseconds.count() / MICROSECONDS_TO_SECONDS;
     cout << fixed << setprecision(8);
-    cout << "Время: " << seconds << " секунд" << endln << endln;
+    cout << "Время: " << seconds << " секунд" << nl << nl;
 }
 
 void test() {
@@ -313,7 +313,7 @@ void test() {
                                       {2, 10000001},
                                       {3, 1001},
                                       {3, 3001}};
-    cout << "Первое задание:" << endln;
+    cout << "Первое задание:" << nl;
     for (pair<ll, ll> t: testCasesFirst) {
         ll a = t.first;
         ll b = t.second;
@@ -322,7 +322,7 @@ void test() {
 
     cout << "=================================\n";
 
-    cout << "Второе задание:" << endln;
+    cout << "Второе задание:" << nl;
     for (pair<ll, ll> t: testCasesSecond) {
         ll a = t.first;
         ll b = t.second;
@@ -331,7 +331,7 @@ void test() {
 
     cout << "=================================\n";
 
-    cout << "Третье задание (без вычетания):" << endln;
+    cout << "Третье задание (без вычетания):" << nl;
     for (pair<ll, ll> t: testCasesFirst) {
         ll a = t.first;
         ll b = t.second;
@@ -340,7 +340,7 @@ void test() {
 
     cout << "=================================\n";
 
-    cout << "Третье задание (с вычетанием):" << endln;
+    cout << "Третье задание (с вычетанием):" << nl;
     for (pair<ll, ll> t: testCasesSecond) {
         ll a = t.first;
         ll b = t.second;
@@ -349,7 +349,7 @@ void test() {
 
     cout << "=================================\n";
 
-    cout << "Четвертое задание:" << endln;
+    cout << "Четвертое задание:" << nl;
     for (pair<ll, ll> t: testCasesFirst) {
         ll a = t.first;
         ll b = t.second;
