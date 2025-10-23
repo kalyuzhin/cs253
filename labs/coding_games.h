@@ -1,0 +1,8 @@
+//
+// Created by Марк Калюжин on 23.10.2025.
+//
+
+#ifndef COMPUTINGSYSTEMS_CODING_GAMES_H
+#define COMPUTINGSYSTEMS_CODING_GAMES_H
+
+#endif //COMPUTINGSYSTEMS_CODING_GAMES_H

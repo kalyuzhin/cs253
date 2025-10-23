@@ -1,7 +1,7 @@
-#include "labs/lab2.h"
+#include "labs/lab3.h"
 
 int main() {
-    run(0, nullptr);
+    sokoban::run();
 
     return 0;
 }

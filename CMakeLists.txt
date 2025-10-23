@@ -8,4 +8,6 @@ add_executable(ComputingSystems main.cpp
         labs/lab2.h
         labs/lab1.cpp
         labs/lab1.h
-        provider.h)
+        provider.h
+        labs/lab3.cpp
+        labs/lab3.h)
