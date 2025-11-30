@@ -13,7 +13,7 @@ ifeq ($(PLATFORM), windows)
     BUILD_FILE = $(LOCAL_BIN_FOLDER)/run.exe
     MKDIR_CMD = if not exist "$(LOCAL_BIN_FOLDER)" mkdir "$(subst /,\\,$(LOCAL_BIN_FOLDER))"
 else ifeq ($(PLATFORM), macOS)
-    COMPILER = clang++
+    COMPILER = g++
     CPPFLAGS = -Wall -std=c++20 -O3 -o
     BUILD_FILE = $(LOCAL_BIN_FOLDER)/run
     MKDIR_CMD = mkdir -p $(LOCAL_BIN_FOLDER)
@@ -56,7 +56,7 @@ help:
 ## build project
 build:
 	$(shell MKDIR_CMD)
-	$(COMPILER) $(CPPFLAGS) $(BUILD_FILE) $(MAIN_PATH)
+	$(COMPILER) $(CPPFLAGS) $(BUILD_FILE) main.cpp labs/lab2.cpp
 .PHONY: run
 ## run project
 run: build

@@ -15,6 +15,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <fstream>
+#include <unistd.h>
 
 #pragma GCC optimize("Ofast,unroll-loops")
 #pragma GCC target("avx2,popcnt,lzcnt,abm,bmi,bmi2,fma,tune=native")
@@ -32,7 +33,6 @@ using namespace std;
 
 template<typename T>
 using vec = vector<T>;
-
 
 
 #endif //COMPUTINGSYSTEMS_PROVIDER_H

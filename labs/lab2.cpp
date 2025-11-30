@@ -204,7 +204,7 @@ static bool dfs_limit(ull cur, int limit, int lastMove, vec<int> &path, Metrics 
     if (limit == 0) return false;
     onpath.insert(cur);
     for (auto [ns, dir]: neighbors(cur)) {
-        if (lastMove != -1 && dir == invMove(lastMove)) continue; // don't immediately backtrack
+        if (lastMove != -1 && dir == invMove(lastMove)) continue;
         if (onpath.count(ns)) continue;
         path.push_back(dir);
         if (dfs_limit(ns, limit - 1, dir, path, met, onpath)) return true;
@@ -251,7 +251,11 @@ struct ANode {
 };
 
 struct CmpAN {
-    bool operator()(const ANode &a, const ANode &b) const { return a.f > b.f; }
+    bool operator()(const ANode &a, const ANode &b) const {
+        if (a.f != b.f) return a.f > b.f;
+        if (a.g != b.g) return a.g < b.g;
+        return a.s > b.s;
+    }
 };
 
 static pair<vec<int>, Metrics> solve_astar(ull start) {
@@ -271,9 +275,10 @@ static pair<vec<int>, Metrics> solve_astar(ull start) {
         if (cur.s == GOAL) break;
         if (cur.g != bestG[cur.s]) continue;
         for (auto [ns, dir]: neighbors(cur.s)) {
-            if (cur.move != -1 && dir == invMove(cur.move)) {}
+            if (cur.move != -1 && dir == invMove(cur.move)) continue;
             int ng = cur.g + 1;
             auto it = bestG.find(ns);
+            if (it != bestG.end() && ng >= it->second) continue;
             if (it == bestG.end() || ng < it->second) {
                 bestG[ns] = ng;
                 parent[ns] = {cur.s, dir};

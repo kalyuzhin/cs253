@@ -244,13 +244,20 @@ namespace sokoban {
                 stepIndex = 0;
             }
 
-            char out = 'U';
-            if (!cachedPath.empty() && stepIndex < cachedPath.size())
-                out = cachedPath[stepIndex++];
-            else
-                out = 'U';
+            if (!isatty(fileno(stdin))) {
+                char out = 'U';
+                if (!cachedPath.empty() && stepIndex < cachedPath.size())
+                    out = cachedPath[stepIndex++];
+                cout << out << '\n' << flush;
+            } else {
+                if (cachedPath.empty()) {
+                    State start{s, {py, px}};
+                    cachedPath = solve_astar(start, H, W);
+                }
+                cout << cachedPath << '\n';
+                return 0;
+            }
 
-            std::cout << out << '\n' << std::flush;
         }
 
         return 0;

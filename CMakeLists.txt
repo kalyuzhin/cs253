@@ -10,4 +10,8 @@ add_executable(ComputingSystems main.cpp
         labs/lab1.h
         provider.h
         labs/lab3.cpp
-        labs/lab3.h)
+        labs/lab3.h
+        labs/coding_games.cpp
+        labs/coding_games.h
+        labs/lab4.h
+        labs/windmill.h)

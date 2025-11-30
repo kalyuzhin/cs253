@@ -1,7 +1,10 @@
-#include "labs/lab3.h"
+//#include "labs/lab3.h"
+//#include "labs/coding_games.h"
+//#include "labs/lab2.h"
+#include "labs/windmill.h"
 
 int main() {
-    sokoban::run();
+    windmill::run();
 
     return 0;
 }
