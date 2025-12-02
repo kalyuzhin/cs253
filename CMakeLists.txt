@@ -13,6 +13,8 @@ add_executable(ComputingSystems main.cpp
         labs/lab3.h
         labs/coding_games.cpp
         labs/coding_games.h
-        labs/lab4.h
         labs/windmill.h
-        labs/race.h)
+        labs/race.h
+        labs/race.h
+        labs/race.h
+        labs/windmill_coding_games.h)
