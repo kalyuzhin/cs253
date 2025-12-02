@@ -404,21 +404,21 @@ namespace windmill {
                 score += 15 * (pieceCount[botPlayer] - pieceCount[opp]);
                 score += 20 * (millsBotAll - millsOppAll);
                 score += 10 * (millsBotFresh - millsOppFresh);
-                score += 6  * (potMillsBot - potMillsOpp);
-                score += 2  * ((int) myMoves.size() - (int) oppMoves.size());
+                score += 6 * (potMillsBot - potMillsOpp);
+                score += 2 * ((int) myMoves.size() - (int) oppMoves.size());
             } else if (totalPieces > 10) {
                 score += 25 * (pieceCount[botPlayer] - pieceCount[opp]);
                 score += 35 * (millsBotAll - millsOppAll);
                 score += 15 * (millsBotFresh - millsOppFresh);
                 score += 12 * (blockedOpp - blockedBot);
-                score += 8  * (potMillsBot - potMillsOpp);
-                score += 4  * ((int) myMoves.size() - (int) oppMoves.size());
+                score += 8 * (potMillsBot - potMillsOpp);
+                score += 4 * ((int) myMoves.size() - (int) oppMoves.size());
             } else {
                 score += 40 * (pieceCount[botPlayer] - pieceCount[opp]);
                 score += 40 * (millsBotAll - millsOppAll);
                 score += 20 * (millsBotFresh - millsOppFresh);
                 score += 15 * (blockedOpp - blockedBot);
-                score += 6  * ((int) myMoves.size() - (int) oppMoves.size());
+                score += 6 * ((int) myMoves.size() - (int) oppMoves.size());
             }
 
             if (dblBot) score += 25;
@@ -758,16 +758,16 @@ namespace windmill {
         n[4] = {3, 5, 1, 7};
         n[5] = {4, 13};
         n[6] = {7, 11};
-        n[7] = {6, 8, 4, 16};
+        n[7] = {6, 8, 4};
         n[8] = {7, 12};
         n[9] = {0, 10, 21};
         n[10] = {9, 11, 3, 18};
-        n[11] = {10, 6, 15, 12};
-        n[12] = {8, 13, 17, 11};
+        n[11] = {10, 6, 15};
+        n[12] = {8, 13, 17};
         n[13] = {12, 14, 5, 20};
         n[14] = {13, 2, 23};
         n[15] = {11, 16};
-        n[16] = {15, 17, 19, 7};
+        n[16] = {15, 17, 19};
         n[17] = {16, 12};
         n[18] = {10, 19};
         n[19] = {18, 20, 16, 22};
