@@ -107,7 +107,7 @@ namespace windmill {
 
         int countFreshMillsPlayer(int player) const {
             int cnt = 0;
-            for (int mi = 0; mi < (int)mills.size(); ++mi) {
+            for (int mi = 0; mi < (int) mills.size(); ++mi) {
                 if (millUsed[player][mi]) continue;
                 const auto &m = mills[mi];
                 if (cells[m[0]] == player && cells[m[1]] == player && cells[m[2]] == player)
@@ -115,7 +115,6 @@ namespace windmill {
             }
             return cnt;
         }
-
 
         vector<int> newMillsForMove(int pos, int player, int fromPos) const {
             vector<int> res;
@@ -388,8 +387,10 @@ namespace windmill {
 
             int totalPieces = pieceCount[botPlayer] + pieceCount[opp];
 
-            int millsBot = countFreshMillsPlayer(botPlayer);
-            int millsOpp = countFreshMillsPlayer(opp);
+            int millsBotAll = countMillsPlayer(botPlayer);
+            int millsOppAll = countMillsPlayer(opp);
+            int millsBotFresh = countFreshMillsPlayer(botPlayer);
+            int millsOppFresh = countFreshMillsPlayer(opp);
             int potMillsBot = countPotentialMills(botPlayer);
             int potMillsOpp = countPotentialMills(opp);
             int blockedBot = countBlockedPieces(botPlayer);
@@ -400,22 +401,28 @@ namespace windmill {
             int score = 0;
 
             if (piecesInHand[botPlayer] > 0 || piecesInHand[opp] > 0) {
-                score += 100 * (pieceCount[botPlayer] - pieceCount[opp]);
-                score += 50 * (millsBot - millsOpp);
-                score += 10 * (potMillsBot - potMillsOpp);
+                score += 15 * (pieceCount[botPlayer] - pieceCount[opp]);
+                score += 20 * (millsBotAll - millsOppAll);
+                score += 10 * (millsBotFresh - millsOppFresh);
+                score += 6  * (potMillsBot - potMillsOpp);
+                score += 2  * ((int) myMoves.size() - (int) oppMoves.size());
             } else if (totalPieces > 10) {
-                score += 150 * (millsBot - millsOpp);
-                score += 25 * (blockedOpp - blockedBot);
-                score += 10 * ((int) myMoves.size() - (int) oppMoves.size());
-                score += 20 * (potMillsBot - potMillsOpp);
+                score += 25 * (pieceCount[botPlayer] - pieceCount[opp]);
+                score += 35 * (millsBotAll - millsOppAll);
+                score += 15 * (millsBotFresh - millsOppFresh);
+                score += 12 * (blockedOpp - blockedBot);
+                score += 8  * (potMillsBot - potMillsOpp);
+                score += 4  * ((int) myMoves.size() - (int) oppMoves.size());
             } else {
-                score += 200 * (millsBot - millsOpp);
-                score += 50 * (blockedOpp - blockedBot);
-                score += 15 * ((int) myMoves.size() - (int) oppMoves.size());
+                score += 40 * (pieceCount[botPlayer] - pieceCount[opp]);
+                score += 40 * (millsBotAll - millsOppAll);
+                score += 20 * (millsBotFresh - millsOppFresh);
+                score += 15 * (blockedOpp - blockedBot);
+                score += 6  * ((int) myMoves.size() - (int) oppMoves.size());
             }
 
-            if (dblBot) score += 200;
-            if (dblOpp) score -= 200;
+            if (dblBot) score += 25;
+            if (dblOpp) score -= 25;
 
             return score;
         }
@@ -433,63 +440,38 @@ namespace windmill {
         return sameCapturePair(a.remove1, a.remove2, b.remove1, b.remove2);
     }
 
-    const array<string, 24> Board::indexToCoord = {
-            "a1", "d1", "g1",
-            "b2", "d2", "f2",
-            "c3", "d3", "e3",
-            "a4", "b4", "c4", "e4", "f4", "g4",
-            "c5", "d5", "e5",
-            "b6", "d6", "f6",
-            "a7", "d7", "g7"
-    };
+    bool blocksOppMill(const Board &b, int player, int pos) {
+        int opp = 1 - player;
+        for (const auto &t: Board::mills) {
+            bool hasPos = false;
+            int oppOthers = 0;
+            for (int idx: t) {
+                if (idx == pos) {
+                    hasPos = true;
+                } else {
+                    if (b.cells[idx] == opp) ++oppOthers;
+                    else if (b.cells[idx] != Board::EMPTY) {
+                        oppOthers = -100;
+                        break;
+                    }
+                }
+            }
+            if (hasPos && oppOthers == 2) return true;
+        }
+        return false;
+    }
 
-    const array<array<int, 3>, 16> Board::mills = {{
-                                                           {0, 1, 2},
-                                                           {3, 4, 5},
-                                                           {6, 7, 8},
-                                                           {9, 10, 11},
-                                                           {12, 13, 14},
-                                                           {15, 16, 17},
-                                                           {18, 19, 20},
-                                                           {21, 22, 23},
-                                                           {0, 9, 21},
-                                                           {3, 10, 18},
-                                                           {6, 11, 15},
-                                                           {1, 4, 7},
-                                                           {16, 19, 22},
-                                                           {8, 12, 17},
-                                                           {5, 13, 20},
-                                                           {2, 14, 23}
-                                                   }};
-
-    const array<vector<int>, 24> Board::neighbours = []() {
-        array<vector<int>, 24> n;
-        n[0] = {1, 9};
-        n[1] = {0, 2, 4};
-        n[2] = {1, 14};
-        n[3] = {4, 10};
-        n[4] = {3, 5, 1, 7};
-        n[5] = {4, 13};
-        n[6] = {7, 11};
-        n[7] = {6, 8, 4, 16};
-        n[8] = {7, 12};
-        n[9] = {0, 10, 21};
-        n[10] = {9, 11, 3, 18};
-        n[11] = {10, 6, 15, 12};
-        n[12] = {8, 13, 17, 11};
-        n[13] = {12, 14, 5, 20};
-        n[14] = {13, 2, 23};
-        n[15] = {11, 16};
-        n[16] = {15, 17, 19, 7};
-        n[17] = {16, 12};
-        n[18] = {10, 19};
-        n[19] = {18, 20, 16, 22};
-        n[20] = {19, 13};
-        n[21] = {9, 22};
-        n[22] = {21, 23, 19};
-        n[23] = {22, 14};
-        return n;
-    }();
+    int movePriority(const Move &m, Board &board, int player) {
+        int sc = 0;
+        if (m.remove1 != -1 || m.remove2 != -1) sc += 4000;
+        auto newMs = board.newMillsForMove(m.to, player, m.from);
+        if (!newMs.empty()) sc += 2000;
+        if (blocksOppMill(board, player, m.to)) sc += 1500;
+        if (board.piecesInHand[player] > 0 && m.from == -1) {
+            if (Board::indexToCoord[m.to][0] == 'd') sc += 50;
+        }
+        return sc;
+    }
 
     int alphaBeta(Board &board, int depth, int alpha, int beta, int currentPlayer, int botPlayer) {
         const int WIN = 1000000;
@@ -513,6 +495,10 @@ namespace windmill {
             }
             return board.evaluate(botPlayer);
         }
+
+        sort(moves.begin(), moves.end(), [&](const Move &a, const Move &b) {
+            return movePriority(a, board, currentPlayer) > movePriority(b, board, currentPlayer);
+        });
 
         bool maximizing = (currentPlayer == botPlayer);
         int best = maximizing ? numeric_limits<int>::min() : numeric_limits<int>::max();
@@ -540,15 +526,19 @@ namespace windmill {
         int totalPieces = board.pieceCount[0] + board.pieceCount[1];
 
         if (board.piecesInHand[0] + board.piecesInHand[1] > 0) {
-            maxDepth = 4;
+            maxDepth = 5;
         } else if (totalPieces > 10) {
-            maxDepth = 6;
-        } else {
             maxDepth = 7;
+        } else {
+            maxDepth = 8;
         }
 
         auto moves = board.generateMoves(botPlayer);
         if (moves.empty()) return {-1, -1, -1, -1};
+
+        sort(moves.begin(), moves.end(), [&](const Move &a, const Move &b) {
+            return movePriority(a, board, botPlayer) > movePriority(b, board, botPlayer);
+        });
 
         Move lastBotMove = {-1, -1, -1, -1};
         bool hasLastBotMove = false;
@@ -568,17 +558,16 @@ namespace windmill {
         int opp = 1 - botPlayer;
 
         for (const Move &m: moves) {
+            auto newMsForM = board.newMillsForMove(m.to, botPlayer, m.from);
+
             board.applyMove(m, botPlayer);
             int val = alphaBeta(board, maxDepth - 1, alpha, beta, opp, botPlayer);
             board.undoLastMove();
 
             if (hasLastBotMove) {
                 bool isReverse = (m.from == lastBotMove.to && m.to == lastBotMove.from);
-                if (isReverse && m.remove1 == -1 && m.remove2 == -1) {
-                    auto newMs = board.newMillsForMove(m.to, botPlayer, m.from);
-                    if (newMs.empty()) {
-                        val -= 80;
-                    }
+                if (isReverse && m.remove1 == -1 && m.remove2 == -1 && newMsForM.empty()) {
+                    val -= 60;
                 }
             }
 
@@ -590,7 +579,6 @@ namespace windmill {
         }
         return bestMove;
     }
-
 
     bool parseMoveString(const string &line, Move &m, const Board &board, int player) {
         vector<string> tokens;
@@ -731,6 +719,64 @@ namespace windmill {
 
         return 0;
     }
+
+    const array<string, 24> Board::indexToCoord = {
+            "a1", "d1", "g1",
+            "b2", "d2", "f2",
+            "c3", "d3", "e3",
+            "a4", "b4", "c4", "e4", "f4", "g4",
+            "c5", "d5", "e5",
+            "b6", "d6", "f6",
+            "a7", "d7", "g7"
+    };
+
+    const array<array<int, 3>, 16> Board::mills = {{
+                                                           {0, 1, 2},
+                                                           {3, 4, 5},
+                                                           {6, 7, 8},
+                                                           {9, 10, 11},
+                                                           {12, 13, 14},
+                                                           {15, 16, 17},
+                                                           {18, 19, 20},
+                                                           {21, 22, 23},
+                                                           {0, 9, 21},
+                                                           {3, 10, 18},
+                                                           {6, 11, 15},
+                                                           {1, 4, 7},
+                                                           {16, 19, 22},
+                                                           {8, 12, 17},
+                                                           {5, 13, 20},
+                                                           {2, 14, 23}
+                                                   }};
+
+    const array<vector<int>, 24> Board::neighbours = []() {
+        array<vector<int>, 24> n;
+        n[0] = {1, 9};
+        n[1] = {0, 2, 4};
+        n[2] = {1, 14};
+        n[3] = {4, 10};
+        n[4] = {3, 5, 1, 7};
+        n[5] = {4, 13};
+        n[6] = {7, 11};
+        n[7] = {6, 8, 4, 16};
+        n[8] = {7, 12};
+        n[9] = {0, 10, 21};
+        n[10] = {9, 11, 3, 18};
+        n[11] = {10, 6, 15, 12};
+        n[12] = {8, 13, 17, 11};
+        n[13] = {12, 14, 5, 20};
+        n[14] = {13, 2, 23};
+        n[15] = {11, 16};
+        n[16] = {15, 17, 19, 7};
+        n[17] = {16, 12};
+        n[18] = {10, 19};
+        n[19] = {18, 20, 16, 22};
+        n[20] = {19, 13};
+        n[21] = {9, 22};
+        n[22] = {21, 23, 19};
+        n[23] = {22, 14};
+        return n;
+    }();
 }
 
 #endif
